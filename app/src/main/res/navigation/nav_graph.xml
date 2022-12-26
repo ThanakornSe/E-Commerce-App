@@ -7,8 +7,14 @@
 
     <fragment android:id="@+id/productListFragment"
         android:name="com.example.mviredux.ui.fragment.ProductListFragment"
-        android:label="Products list"
+        android:label="All Product"
         tools:layout="@layout/fragment_product_list"
+        />
+
+    <fragment android:id="@+id/profileFragment"
+        android:name="com.example.mviredux.ui.fragment.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile"
         />
 
 

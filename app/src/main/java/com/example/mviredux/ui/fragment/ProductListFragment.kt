@@ -28,7 +28,8 @@ class ProductListFragment : Fragment() {
     private val epoxyController: ProductEpoxyController by lazy {
         ProductEpoxyController(
             ::onFavoriteIconClicked,
-            ::onAddToCartClicked
+            ::onAddToCartClicked,
+            ::onUiProductClicked
         )
     }
 
@@ -50,13 +51,15 @@ class ProductListFragment : Fragment() {
         combine(
             viewModel.store.stateFlow.map { it.products },
             viewModel.store.stateFlow.map { it.favoriteProductIds },
-            viewModel.store.stateFlow.map { it.inCartProductIds }
-        ) { listOfProducts, setOfFavoriteIds, setOfInCartIds ->
+            viewModel.store.stateFlow.map { it.inCartProductIds },
+            viewModel.store.stateFlow.map { it.expandedProductIds }
+        ) { listOfProducts, setOfFavoriteIds, setOfInCartIds , setOfExpandedIds->
             listOfProducts.map { product ->
                 UiProduct(
                     product = product,
                     isFavorite = setOfFavoriteIds.contains(product.id),
-                    isInCart = setOfInCartIds.contains(product.id)
+                    isInCart = setOfInCartIds.contains(product.id),
+                    isExpanded = setOfExpandedIds.contains(product.id)
                 )
             }
         }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { uiProduct ->
@@ -94,6 +97,22 @@ class ProductListFragment : Fragment() {
                     currentInCartIds + setOf(productId)
                 }
                 return@update currentState.copy(inCartProductIds = newInCartIds)
+            }
+        }
+    }
+
+    private fun onUiProductClicked(productId: Int) {
+        viewModel.viewModelScope.launch {
+            viewModel.store.update { currentState ->
+                val currentExpandedIds = currentState.expandedProductIds
+                val newExpandedIds: Set<Int> = if (currentExpandedIds.contains(productId)) {
+                    currentExpandedIds.filter { it != productId }.toSet()
+                    //this scope mean user deselected from Cart
+                } else {
+                    //this scope mean user select to InCart
+                    currentExpandedIds + setOf(productId)
+                }
+                return@update currentState.copy(expandedProductIds = newExpandedIds)
             }
         }
     }
