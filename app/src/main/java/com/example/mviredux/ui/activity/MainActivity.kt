@@ -8,6 +8,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import coil.load
 import com.androidfactory.fakestore.model.domain.Product
 import com.androidfactory.fakestore.model.mapper.ProductMapper
@@ -32,72 +34,14 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private val epoxyController: ProductEpoxyController by lazy {
-        ProductEpoxyController(
-            ::onFavoriteIconClicked,
-            ::onAddToCartClicked
-        )
-    }
-
-    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.epoxyRecyclerView.setController(epoxyController)
-        epoxyController.setData(emptyList())
-
-        combine(
-            viewModel.store.stateFlow.map { it.products },
-            viewModel.store.stateFlow.map { it.favoriteProductIds },
-            viewModel.store.stateFlow.map { it.inCartProductIds }
-        ) { listOfProducts, setOfFavoriteIds, setOfInCartIds ->
-            listOfProducts.map { product ->
-                UiProduct(
-                    product = product,
-                    isFavorite = setOfFavoriteIds.contains(product.id),
-                    isInCart = setOfInCartIds.contains(product.id)
-                )
-            }
-        }.distinctUntilChanged().asLiveData().observe(this) { uiProduct ->
-            epoxyController.setData(uiProduct)
-        }
-
-        viewModel.fetchProducts()
-
-    }
-
-    private fun onFavoriteIconClicked(productId: Int) {
-        viewModel.viewModelScope.launch {
-            viewModel.store.update { currentState ->
-                val currentFavIds = currentState.favoriteProductIds
-                val newFavoriteIds: Set<Int> = if (currentFavIds.contains(productId)) {
-                    currentFavIds.filter { it != productId }.toSet()
-                    //this scope mean user deselected favorite
-                } else {
-                    //this scope mean user select favorite
-                    currentFavIds + setOf(productId)
-                }
-                return@update currentState.copy(favoriteProductIds = newFavoriteIds)
-            }
-        }
-    }
-
-    private fun onAddToCartClicked(productId: Int) {
-        viewModel.viewModelScope.launch {
-            viewModel.store.update { currentState ->
-                val currentInCartIds = currentState.inCartProductIds
-                val newInCartIds: Set<Int> = if (currentInCartIds.contains(productId)) {
-                    currentInCartIds.filter { it != productId }.toSet()
-                    //this scope mean user deselected from Cart
-                } else {
-                    //this scope mean user select to InCart
-                    currentInCartIds + setOf(productId)
-                }
-                return@update currentState.copy(inCartProductIds = newInCartIds)
-            }
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        setupActionBarWithNavController(navController)
     }
 
 }
