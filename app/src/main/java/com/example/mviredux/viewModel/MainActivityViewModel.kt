@@ -19,9 +19,6 @@ class MainActivityViewModel @Inject constructor(
     val store: Store<ApplicationState>
 ) : ViewModel() {
 
-//    private val _productsLiveData = MutableLiveData<List<Product>>()
-//    val productLiveData: LiveData<List<Product>> get() = _productsLiveData
-
     fun fetchProducts() = viewModelScope.launch {
         val products:List<Product> = repository.fetchAllProducts()
         store.update {
@@ -32,11 +29,6 @@ class MainActivityViewModel @Inject constructor(
             so we use .copy and just change stuff that we care about (products)
             and the last we return T (ApplicationState) that hold lastest list of Products
              */
-        }
-
-        delay(5000)
-        store.update {
-            return@update it.copy(favoriteProductIds = setOf(1,2,4))
         }
     }
 

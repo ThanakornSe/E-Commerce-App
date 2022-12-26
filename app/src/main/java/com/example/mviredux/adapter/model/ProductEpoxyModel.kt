@@ -11,7 +11,8 @@ import com.example.mviredux.utils.ViewBindingKotlinModel
 import java.text.NumberFormat
 
 data class ProductEpoxyModel(
-    val uiProduct: UiProduct?
+    val uiProduct: UiProduct?,
+    val onFavoriteIconClicked:(Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance()
@@ -36,6 +37,9 @@ data class ProductEpoxyModel(
                 R.drawable.ic_round_favorite_border_24
             }
             favoriteImageView.setIconResource(imageRes)
+            favoriteImageView.setOnClickListener {
+                onFavoriteIconClicked(ui.product.id)
+            }
 
             // Load our image
             productImageViewLoadingProgressBar.isVisible = true

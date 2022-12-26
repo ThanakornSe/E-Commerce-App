@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import coil.load
 import com.androidfactory.fakestore.model.domain.Product
 import com.androidfactory.fakestore.model.mapper.ProductMapper
@@ -22,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val epoxyController: ProductEpoxyController by lazy {
-        ProductEpoxyController()
+        ProductEpoxyController(::onFavoriteIconClicked)
     }
 
     private val viewModel: MainActivityViewModel by viewModels()
@@ -56,6 +58,22 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.fetchProducts()
 
+    }
+
+    private fun onFavoriteIconClicked(productId:Int) {
+        viewModel.viewModelScope.launch {
+            viewModel.store.update { currentState ->
+                val currentFavIds = currentState.favoriteProductIds
+                val newFavoriteIds: Set<Int> = if (currentFavIds.contains(productId)) {
+                    currentFavIds.filter { it != productId }.toSet()
+                    //this scope mean user deselected favorite
+                }else {
+                    //this scope mean user select favorite
+                    currentFavIds + setOf(productId)
+                }
+                return@update currentState.copy(favoriteProductIds = newFavoriteIds)
+            }
+        }
     }
 
 //    private fun setupListeners() {
