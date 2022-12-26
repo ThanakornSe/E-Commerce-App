@@ -1,20 +1,20 @@
 package com.example.mviredux.adapter.controller
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.androidfactory.fakestore.model.domain.Product
 import com.example.mviredux.adapter.model.ProductEpoxyModel
+import com.example.mviredux.model.ui.UiProduct
 
-class ProductEpoxyController : TypedEpoxyController<List<Product>>() {
+class ProductEpoxyController : TypedEpoxyController<List<UiProduct>>() {
 
-    override fun buildModels(data: List<Product>?) {
+    override fun buildModels(data: List<UiProduct>?) {
         if (data.isNullOrEmpty()) {
             repeat(7) {
                 val epoxyId = it + 1
-                ProductEpoxyModel(product = null).id(epoxyId).addTo(this)
+                ProductEpoxyModel(uiProduct = null).id(epoxyId).addTo(this)
             }
         }else {
-            data.forEach { product ->
-                ProductEpoxyModel(product).id(product.id).addTo(this)
+            data.forEach { uiProduct ->
+                ProductEpoxyModel(uiProduct).id(uiProduct.product.id).addTo(this)
             }
         }
     }

@@ -9,6 +9,7 @@ import com.example.mviredux.redux.ApplicationState
 import com.example.mviredux.redux.Store
 import com.example.mviredux.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,11 @@ class MainActivityViewModel @Inject constructor(
             so we use .copy and just change stuff that we care about (products)
             and the last we return T (ApplicationState) that hold lastest list of Products
              */
+        }
+
+        delay(5000)
+        store.update {
+            return@update it.copy(favoriteProductIds = setOf(1,2,4))
         }
     }
 

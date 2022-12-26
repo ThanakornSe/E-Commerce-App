@@ -11,11 +11,11 @@ class Store<T>(initialState: T) {
     private val _stateFlow = MutableStateFlow(initialState)
     val stateFlow: StateFlow<T> = _stateFlow.asStateFlow()
 
-    private val mutex = Mutex()
+    private val mutex = Mutex() //lock the store when reading and writing
 
     suspend fun update(updateBlock: (T) -> T) = mutex.withLock {
-        //updateBlock:(T) -> T
-        //this mean (T) only argument is T and the return type -> is gonna be T
+        //updateBlock:(T) -> T is lambda
+        //(T) is argument and the return type -> is gonna be T
 
         val newState = updateBlock(_stateFlow.value) //The idea here is we can update block with current state
         _stateFlow.value = newState

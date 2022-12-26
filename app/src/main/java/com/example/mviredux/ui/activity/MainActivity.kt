@@ -14,10 +14,12 @@ import com.example.mviredux.R
 import com.example.mviredux.adapter.controller.ProductEpoxyController
 import com.example.mviredux.databinding.ActivityMainBinding
 import com.example.mviredux.model.network.NetworkProduct
+import com.example.mviredux.model.ui.UiProduct
 import com.example.mviredux.network.ProductsServices
 import com.example.mviredux.viewModel.MainActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import retrofit2.Response
@@ -41,16 +43,17 @@ class MainActivity : AppCompatActivity() {
         binding.epoxyRecyclerView.setController(epoxyController)
         epoxyController.setData(emptyList())
 
-        viewModel.store.stateFlow.map {
-            it.products
-        }.distinctUntilChanged().asLiveData().observe(this) { products ->
-            products?.let {
-                epoxyController.setData(it)
+        combine(
+            viewModel.store.stateFlow.map { it.products },
+            viewModel.store.stateFlow.map { it.favoriteProductIds }
+        ) { listOfProducts, setOfFavoriteIds ->
+            listOfProducts.map { product ->
+                UiProduct(product = product, isFavorite = setOfFavoriteIds.contains(product.id))
             }
-            if (products.isEmpty()) {
-                Snackbar.make(binding.root, "Failed to fetch", Snackbar.LENGTH_LONG).show()
-            }
+        }.distinctUntilChanged().asLiveData().observe(this) { uiProduct ->
+            epoxyController.setData(uiProduct)
         }
+
         viewModel.fetchProducts()
 
     }
