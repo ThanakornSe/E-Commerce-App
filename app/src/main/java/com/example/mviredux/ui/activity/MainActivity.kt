@@ -33,7 +33,10 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val epoxyController: ProductEpoxyController by lazy {
-        ProductEpoxyController(::onFavoriteIconClicked)
+        ProductEpoxyController(
+            ::onFavoriteIconClicked,
+            ::onAddToCartClicked
+        )
     }
 
     private val viewModel: MainActivityViewModel by viewModels()
@@ -47,10 +50,15 @@ class MainActivity : AppCompatActivity() {
 
         combine(
             viewModel.store.stateFlow.map { it.products },
-            viewModel.store.stateFlow.map { it.favoriteProductIds }
-        ) { listOfProducts, setOfFavoriteIds ->
+            viewModel.store.stateFlow.map { it.favoriteProductIds },
+            viewModel.store.stateFlow.map { it.inCartProductIds }
+        ) { listOfProducts, setOfFavoriteIds, setOfInCartIds ->
             listOfProducts.map { product ->
-                UiProduct(product = product, isFavorite = setOfFavoriteIds.contains(product.id))
+                UiProduct(
+                    product = product,
+                    isFavorite = setOfFavoriteIds.contains(product.id),
+                    isInCart = setOfInCartIds.contains(product.id)
+                )
             }
         }.distinctUntilChanged().asLiveData().observe(this) { uiProduct ->
             epoxyController.setData(uiProduct)
@@ -60,14 +68,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun onFavoriteIconClicked(productId:Int) {
+    private fun onFavoriteIconClicked(productId: Int) {
         viewModel.viewModelScope.launch {
             viewModel.store.update { currentState ->
                 val currentFavIds = currentState.favoriteProductIds
                 val newFavoriteIds: Set<Int> = if (currentFavIds.contains(productId)) {
                     currentFavIds.filter { it != productId }.toSet()
                     //this scope mean user deselected favorite
-                }else {
+                } else {
                     //this scope mean user select favorite
                     currentFavIds + setOf(productId)
                 }
@@ -76,28 +84,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun setupListeners() {
-//        binding.cardView.setOnClickListener {
-//            binding.productDescriptionTextView.apply {
-//                isVisible = !isVisible
-//            }
-//        }
-//
-//        binding.addToCartButton.setOnClickListener {
-//            binding.inCartView.apply {
-//                isVisible = !isVisible
-//            }
-//        }
-//
-//        var isFavorite = false
-//        binding.favoriteImageView.setOnClickListener {
-//            val imageRes: Int = if (isFavorite) {
-//                R.drawable.ic_round_favorite_border_24
-//            } else {
-//                R.drawable.ic_round_favorite_24
-//            }
-//            binding.favoriteImageView.setIconResource(imageRes)
-//            isFavorite = !isFavorite
-//        }
-//    }
+    private fun onAddToCartClicked(productId: Int) {
+        viewModel.viewModelScope.launch {
+            viewModel.store.update { currentState ->
+                val currentInCartIds = currentState.inCartProductIds
+                val newInCartIds: Set<Int> = if (currentInCartIds.contains(productId)) {
+                    currentInCartIds.filter { it != productId }.toSet()
+                    //this scope mean user deselected from Cart
+                } else {
+                    //this scope mean user select to InCart
+                    currentInCartIds + setOf(productId)
+                }
+                return@update currentState.copy(inCartProductIds = newInCartIds)
+            }
+        }
+    }
+
 }

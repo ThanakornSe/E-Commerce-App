@@ -12,7 +12,8 @@ import java.text.NumberFormat
 
 data class ProductEpoxyModel(
     val uiProduct: UiProduct?,
-    val onFavoriteIconClicked:(Int) -> Unit
+    val onFavoriteIconClicked:(Int) -> Unit,
+    val onAddToCartClicked:(Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance()
@@ -39,6 +40,12 @@ data class ProductEpoxyModel(
             favoriteImageView.setIconResource(imageRes)
             favoriteImageView.setOnClickListener {
                 onFavoriteIconClicked(ui.product.id)
+            }
+
+            inCartView.isVisible = ui.isInCart
+            // In Cart Icon
+            addToCartButton.setOnClickListener {
+                onAddToCartClicked(ui.product.id)
             }
 
             // Load our image

@@ -126,6 +126,7 @@
                 android:layout_margin="6dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:visibility="gone"
                 app:backgroundTint="@color/teal_200"
                 app:icon="@drawable/ic_round_check_24"
                 app:iconGravity="textEnd"
