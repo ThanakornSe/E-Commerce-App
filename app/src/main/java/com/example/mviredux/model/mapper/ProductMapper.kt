@@ -4,6 +4,7 @@ import com.androidfactory.fakestore.model.domain.Product
 import com.example.mviredux.model.network.NetworkProduct
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
 import javax.inject.Inject
 
 class ProductMapper @Inject constructor() {
@@ -11,7 +12,7 @@ class ProductMapper @Inject constructor() {
 
     fun buildFrom(networkProduct: NetworkProduct): Product {
         return Product(
-            category = networkProduct.category,
+            category = capitalize(networkProduct.category),
             description = networkProduct.description,
             id = networkProduct.id,
             image = networkProduct.image,
@@ -19,4 +20,12 @@ class ProductMapper @Inject constructor() {
             title = networkProduct.title
         )
     }
+
+
+    private fun capitalize(sequence: String): String {
+        return sequence.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
+    }
+
 }
