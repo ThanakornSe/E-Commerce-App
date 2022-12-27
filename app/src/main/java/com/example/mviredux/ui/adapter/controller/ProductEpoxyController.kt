@@ -1,9 +1,9 @@
-package com.example.mviredux.adapter.controller
+package com.example.mviredux.ui.adapter.controller
 
 import com.airbnb.epoxy.CarouselModel_
 import com.airbnb.epoxy.TypedEpoxyController
-import com.example.mviredux.adapter.model.ProductEpoxyModel
-import com.example.mviredux.adapter.model.ProductFilterEpoxyModel
+import com.example.mviredux.ui.adapter.model.ProductEpoxyModel
+import com.example.mviredux.ui.adapter.model.ProductFilterEpoxyModel
 import com.example.mviredux.model.domain.Filter
 import com.example.mviredux.model.ui.ProductsListFragmentUiState
 import com.example.mviredux.model.ui.UiProduct

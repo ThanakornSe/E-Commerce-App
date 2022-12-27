@@ -11,6 +11,11 @@
         tools:layout="@layout/fragment_product_list"
         />
 
+    <fragment android:id="@+id/cartFragment"
+        android:name="com.example.mviredux.ui.fragment.CartFragment"
+        android:label="Your Cart"
+        tools:layout="@layout/fragment_cart"/>
+
     <fragment android:id="@+id/profileFragment"
         android:name="com.example.mviredux.ui.fragment.ProfileFragment"
         android:label="Profile"

@@ -1,4 +1,4 @@
-package com.example.mviredux.adapter.model
+package com.example.mviredux.ui.adapter.model
 
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible

@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mviredux.R
-import com.example.mviredux.adapter.controller.ProductEpoxyController
+import com.example.mviredux.ui.adapter.controller.ProductEpoxyController
 import com.example.mviredux.databinding.FragmentProductListBinding
 import com.example.mviredux.model.domain.Filter
 import com.example.mviredux.model.ui.ProductsListFragmentUiState
