@@ -6,42 +6,53 @@ import androidx.core.view.updateLayoutParams
 import coil.load
 import com.example.mviredux.R
 import com.example.mviredux.databinding.EpoxyModelCartProductItemBinding
-import com.example.mviredux.model.ui.UiProduct
+import com.example.mviredux.model.ui.UiProductInCart
 import com.example.mviredux.utils.ViewBindingKotlinModel
 
 data class CartItemEpoxyModel(
-    private val uiProduct: UiProduct,
+    private val uiProductInCart: UiProductInCart,
     @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
     private val onFavoriteClicked: (Int) -> Unit,
-    private val onDeleteClicked: (Int) -> Unit
+    private val onDeleteClicked: (Int) -> Unit,
+    private val onQuantityChange: (Int, Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
 
     override fun EpoxyModelCartProductItemBinding.bind() {
         // Setup our text
-        productTitleTextView.text = uiProduct.product.title
+        productTitleTextView.text = uiProductInCart.uiProduct.product.title
 
         // Favorite icon
-        val imageRes = if (uiProduct.isFavorite) {
+        val imageRes = if (uiProductInCart.uiProduct.isFavorite) {
             R.drawable.ic_round_favorite_24
         } else {
             R.drawable.ic_round_favorite_border_24
         }
         favoriteImageView.setIconResource(imageRes)
-        favoriteImageView.setOnClickListener { onFavoriteClicked(uiProduct.product.id) }
+        favoriteImageView.setOnClickListener { onFavoriteClicked(uiProductInCart.uiProduct.product.id) }
 
-        deleteIconImageView.setOnClickListener { onDeleteClicked(uiProduct.product.id) }
+        deleteIconImageView.setOnClickListener { onDeleteClicked(uiProductInCart.uiProduct.product.id) }
 
         // Load our image
-        productImageView.load(data = uiProduct.product.image)
+        productImageView.load(data = uiProductInCart.uiProduct.product.image)
 
         root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             setMargins(horizontalMargin, 0, horizontalMargin, 0)
         }
 
         quantityView.apply {
-            quantityTextView.text = 9.toString()
-            minusImageView.setOnClickListener {  }
-            plusImageView.setOnClickListener {  }
+            quantityTextView.text = uiProductInCart.quantity.toString()
+            minusImageView.setOnClickListener {
+                onQuantityChange(
+                    uiProductInCart.uiProduct.product.id,
+                    uiProductInCart.quantity - 1
+                )
+            }
+            plusImageView.setOnClickListener {
+                onQuantityChange(
+                    uiProductInCart.uiProduct.product.id,
+                    uiProductInCart.quantity + 1
+                )
+            }
         }
     }
 }

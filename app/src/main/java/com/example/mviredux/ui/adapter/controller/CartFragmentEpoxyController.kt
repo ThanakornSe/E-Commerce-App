@@ -11,7 +11,8 @@ import com.example.mviredux.utils.VerticalSpaceEpoxyModel
 class CartFragmentEpoxyController(
     private val onEmptyCardClicked:() -> Unit,
     private val onFavoriteClicked: (Int) -> Unit,
-    private val onDeleteClicked: (Int) -> Unit
+    private val onDeleteClicked: (Int) -> Unit,
+    private val onQuantityChange:(Int,Int) -> Unit
 ) : TypedEpoxyController<CartFragmentUiState>() {
     override fun buildModels(data: CartFragmentUiState?) {
         when (data) {
@@ -22,11 +23,12 @@ class CartFragmentEpoxyController(
                 data.products.forEachIndexed { index, uiProduct ->
                     addVerticalStyling(index)
                     CartItemEpoxyModel(
-                        uiProduct = uiProduct,
+                        uiProductInCart = uiProduct,
                         24.toPx(),
                         onFavoriteClicked,
-                        onDeleteClicked
-                    ).id(uiProduct.product.id).addTo(this)
+                        onDeleteClicked,
+                        onQuantityChange
+                    ).id(uiProduct.uiProduct.product.id).addTo(this)
                 }
             }
         }
