@@ -1,27 +1,24 @@
 package com.example.mviredux.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.mviredux.R
-import com.example.mviredux.ui.adapter.controller.ProductEpoxyController
 import com.example.mviredux.databinding.FragmentProductListBinding
 import com.example.mviredux.model.domain.Filter
-import com.example.mviredux.model.ui.ProductsListFragmentUiState
-import com.example.mviredux.model.ui.UiFilter
-import com.example.mviredux.model.ui.UiProduct
+import com.example.mviredux.redux.reducer.ProductListFragmentUiStateGenerator
+import com.example.mviredux.ui.adapter.controller.ProductEpoxyController
 import com.example.mviredux.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProductListFragment : Fragment() {
@@ -39,6 +36,9 @@ class ProductListFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by viewModels()
 
+    @Inject
+    lateinit var uiStateGenerator: ProductListFragmentUiStateGenerator
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,40 +52,12 @@ class ProductListFragment : Fragment() {
         binding.epoxyRecyclerView.setController(epoxyController)
 
         combine(
-            viewModel.store.stateFlow.map { it.products },
-            viewModel.store.stateFlow.map { it.favoriteProductIds },
-            viewModel.store.stateFlow.map { it.inCartProductIds },
-            viewModel.store.stateFlow.map { it.expandedProductIds },
+            viewModel.uiProductListReducer.reduce(viewModel.store),
             viewModel.store.stateFlow.map { it.productFilterInfo }
-        ) { listOfProducts, setOfFavoriteIds, setOfInCartIds, setOfExpandedIds, productFilterInfo ->
+        ) { listOfUiProducts, productFilterInfo ->
 
-            if (listOfProducts.isEmpty()) {
-                return@combine ProductsListFragmentUiState.Loading
-            }
+            uiStateGenerator.generate(listOfUiProducts,productFilterInfo)
 
-            val uiProduct = listOfProducts.map { product ->
-                UiProduct(
-                    product = product,
-                    isFavorite = setOfFavoriteIds.contains(product.id),
-                    isInCart = setOfInCartIds.contains(product.id),
-                    isExpanded = setOfExpandedIds.contains(product.id)
-                )
-            }
-
-            val uiFilter = productFilterInfo.filters.map {
-                UiFilter(
-                    filter = it,
-                    isSelected = productFilterInfo.selectedFilter?.equals(it) == true
-                )
-            }.toSet()
-
-            val filteredProduct = if (productFilterInfo.selectedFilter == null) {
-                uiProduct
-            } else {
-                uiProduct.filter { it.product.category == productFilterInfo.selectedFilter.value }
-            }
-
-            return@combine ProductsListFragmentUiState.Success(uiFilter, filteredProduct)
         }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { uiState ->
             epoxyController.setData(uiState)
         }
@@ -96,15 +68,9 @@ class ProductListFragment : Fragment() {
     private fun onFavoriteIconClicked(productId: Int) {
         viewModel.viewModelScope.launch {
             viewModel.store.update { currentState ->
-                val currentFavIds = currentState.favoriteProductIds
-                val newFavoriteIds: Set<Int> = if (currentFavIds.contains(productId)) {
-                    currentFavIds.filter { it != productId }.toSet()
-                    //this scope mean user deselected favorite
-                } else {
-                    //this scope mean user select favorite
-                    currentFavIds + setOf(productId)
-                }
-                return@update currentState.copy(favoriteProductIds = newFavoriteIds)
+                return@update viewModel.uiProductFavoriteUpdater.onProductFavoriteUpdate(
+                    productId = productId, currentState = currentState
+                )
             }
         }
     }
@@ -112,15 +78,9 @@ class ProductListFragment : Fragment() {
     private fun onAddToCartClicked(productId: Int) {
         viewModel.viewModelScope.launch {
             viewModel.store.update { currentState ->
-                val currentInCartIds = currentState.inCartProductIds
-                val newInCartIds: Set<Int> = if (currentInCartIds.contains(productId)) {
-                    currentInCartIds.filter { it != productId }.toSet()
-                    //this scope mean user deselected from Cart
-                } else {
-                    //this scope mean user select to InCart
-                    currentInCartIds + setOf(productId)
-                }
-                return@update currentState.copy(inCartProductIds = newInCartIds)
+                return@update viewModel.uiProductInCartUpdater.onProductInCartUpdate(
+                    productId = productId, currentState = currentState
+                )
             }
         }
     }
@@ -145,13 +105,14 @@ class ProductListFragment : Fragment() {
         viewModel.viewModelScope.launch {
             viewModel.store.update { currentState ->
                 val currentlySelectedFilter = currentState.productFilterInfo.selectedFilter
+                val newSelectedFilter = if (currentlySelectedFilter != filter) {
+                    filter
+                } else {
+                    null
+                }
                 return@update currentState.copy(
                     productFilterInfo = currentState.productFilterInfo.copy(
-                        selectedFilter = if (currentlySelectedFilter != filter) {
-                            filter
-                        } else {
-                            null
-                        }
+                        selectedFilter = newSelectedFilter
                     )
                 )
             }

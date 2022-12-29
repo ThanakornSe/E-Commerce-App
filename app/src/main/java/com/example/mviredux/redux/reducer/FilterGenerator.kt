@@ -1,4 +1,4 @@
-package com.example.mviredux.utils
+package com.example.mviredux.redux.reducer
 
 import com.androidfactory.fakestore.model.domain.Product
 import com.example.mviredux.model.domain.Filter

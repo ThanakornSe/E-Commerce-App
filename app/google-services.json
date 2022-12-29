@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "756579367347",
+    "project_id": "mvifakestore",
+    "storage_bucket": "mvifakestore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756579367347:android:fda2ce7b6b75e710c173c6",
+        "android_client_info": {
+          "package_name": "com.example.mviredux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756579367347-qb4vat1le4ael7b55rrveus3ptktuveb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDW1st09xwP7fIEtLBcZpdBrzl0FZKnPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756579367347-qb4vat1le4ael7b55rrveus3ptktuveb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
