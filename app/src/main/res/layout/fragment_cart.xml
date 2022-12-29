@@ -22,6 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="7"
-        tools:listitem="@layout/epoxy_model_product_item" />
+        tools:listitem="@layout/epoxy_model_cart_product_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

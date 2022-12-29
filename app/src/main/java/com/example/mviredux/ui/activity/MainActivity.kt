@@ -1,37 +1,21 @@
 package com.example.mviredux.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
-import coil.load
 import com.airbnb.epoxy.Carousel
-import com.androidfactory.fakestore.model.domain.Product
-import com.androidfactory.fakestore.model.mapper.ProductMapper
 import com.example.mviredux.R
-import com.example.mviredux.ui.adapter.controller.ProductEpoxyController
 import com.example.mviredux.databinding.ActivityMainBinding
-import com.example.mviredux.model.network.NetworkProduct
-import com.example.mviredux.model.ui.UiProduct
-import com.example.mviredux.network.ProductsServices
 import com.example.mviredux.redux.ApplicationState
 import com.example.mviredux.redux.Store
-import com.example.mviredux.viewModel.MainActivityViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,6 +59,10 @@ class MainActivity : AppCompatActivity() {
                     number = numberOfProductsInCart
                 }
             }
+    }
+
+    fun navigateTab(@IdRes destinationId:Int){
+        binding.bottomNavigationView.selectedItemId = destinationId
     }
 
 }

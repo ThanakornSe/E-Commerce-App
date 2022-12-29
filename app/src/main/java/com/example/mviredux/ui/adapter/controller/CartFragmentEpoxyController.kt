@@ -1,6 +1,5 @@
 package com.example.mviredux.ui.adapter.controller
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.example.mviredux.model.ui.CartFragmentUiState
 import com.example.mviredux.ui.adapter.model.CartEmptyEpoxyModel
@@ -10,9 +9,9 @@ import com.example.mviredux.utils.AppConst.toPx
 import com.example.mviredux.utils.VerticalSpaceEpoxyModel
 
 class CartFragmentEpoxyController(
-    private val onEmptyCardClicked:(View) -> Unit,
-    private val onFavoriteClicked: () -> Unit,
-    private val onDeleteClicked: () -> Unit
+    private val onEmptyCardClicked:() -> Unit,
+    private val onFavoriteClicked: (Int) -> Unit,
+    private val onDeleteClicked: (Int) -> Unit
 ) : TypedEpoxyController<CartFragmentUiState>() {
     override fun buildModels(data: CartFragmentUiState?) {
         when (data) {
