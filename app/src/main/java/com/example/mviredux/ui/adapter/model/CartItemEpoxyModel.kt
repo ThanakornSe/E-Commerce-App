@@ -10,7 +10,7 @@ import com.example.mviredux.model.ui.UiProductInCart
 import com.example.mviredux.utils.ViewBindingKotlinModel
 
 data class CartItemEpoxyModel(
-    private val uiProductInCart: UiProductInCart,
+    val uiProductInCart: UiProductInCart,
     @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
     private val onFavoriteClicked: (Int) -> Unit,
     private val onDeleteClicked: (Int) -> Unit,
@@ -18,6 +18,7 @@ data class CartItemEpoxyModel(
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
 
     override fun EpoxyModelCartProductItemBinding.bind() {
+        swipeToDismissTextView.translationX = 0f
         // Setup our text
         productTitleTextView.text = uiProductInCart.uiProduct.product.title
 

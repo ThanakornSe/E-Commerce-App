@@ -1,23 +1,27 @@
 package com.example.mviredux.ui.fragment
 
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.airbnb.epoxy.EpoxyTouchHelper
 import com.example.mviredux.R
 import com.example.mviredux.databinding.FragmentCartBinding
 import com.example.mviredux.model.ui.CartFragmentUiState
 import com.example.mviredux.model.ui.UiProductInCart
 import com.example.mviredux.ui.activity.MainActivity
 import com.example.mviredux.ui.adapter.controller.CartFragmentEpoxyController
+import com.example.mviredux.ui.adapter.model.CartItemEpoxyModel
 import com.example.mviredux.viewModel.CartFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 @AndroidEntryPoint
 class CartFragment : Fragment(R.layout.fragment_cart) {
@@ -59,6 +63,38 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             }
             epoxyController.setData(viewState)
         }
+
+        EpoxyTouchHelper
+            .initSwiping(binding.epoxyRecyclerView)
+            .right()
+            .withTarget(CartItemEpoxyModel::class.java)
+            .andCallbacks(object : EpoxyTouchHelper.SwipeCallbacks<CartItemEpoxyModel>() {
+                override fun onSwipeCompleted(
+                    model: CartItemEpoxyModel?,
+                    itemView: View?,
+                    position: Int,
+                    direction: Int
+                ) {
+                    model?.let { epoxyModel ->
+                        onDeleteClicked(epoxyModel.uiProductInCart.uiProduct.product.id)
+                    }
+                }
+
+                override fun onSwipeProgressChanged(
+                    model: CartItemEpoxyModel?,
+                    itemView: View?,
+                    swipeProgress: Float,
+                    canvas: Canvas?
+                ) {
+                    itemView?.findViewById<View>(R.id.swipeToDismissTextView)?.apply {
+                        translationX = max(-itemView.translationX, -measuredWidth.toFloat())
+                        alpha = 5f * swipeProgress //this is for start fading
+                    }
+//                    itemView?.findViewById<View>(R.id.cl_parent)?.apply {
+//                        alpha = -(3f * swipeProgress)
+//                    }
+                }
+            })
 
     }
 

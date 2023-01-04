@@ -9,6 +9,7 @@ import com.example.mviredux.databinding.EpoxyModelProductItemBinding
 import com.example.mviredux.model.ui.UiProduct
 import com.example.mviredux.utils.ViewBindingKotlinModel
 import java.text.NumberFormat
+import kotlin.math.roundToInt
 
 data class ProductEpoxyModel(
     val uiProduct: UiProduct?,
@@ -63,6 +64,9 @@ data class ProductEpoxyModel(
                     productImageViewLoadingProgressBar.isGone = true
                 }
             }
+
+            ratingIndicator.progress = (uiProduct.product.rating.value*10).roundToInt()
+            ratingTextView.text = "${uiProduct.product.rating.value}"
         } ?: shimmerLayout.startShimmer()
     }
 }
