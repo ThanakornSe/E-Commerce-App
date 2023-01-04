@@ -74,6 +74,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_twotone_delete_24" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_totalProductPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/purple_500"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/deleteIconImageView"
+        app:layout_constraintEnd_toStartOf="@+id/deleteIconImageView"
+        app:layout_constraintTop_toTopOf="@+id/deleteIconImageView"
+        tools:text="$109.95" />
+
     <include
         android:id="@+id/quantityView"
         layout="@layout/layout_quantity_selector"

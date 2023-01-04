@@ -2,6 +2,7 @@ package com.example.mviredux.utils
 
 import android.content.res.Resources
 import androidx.annotation.Dimension
+import java.text.NumberFormat
 import java.util.*
 
 object AppConst {
@@ -12,4 +13,6 @@ object AppConst {
 
     @Dimension(unit = Dimension.PX)
     fun Int.toPx():Int = (this/Resources.getSystem().displayMetrics.density).toInt()
+
+    val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance()
 }

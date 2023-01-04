@@ -15,12 +15,14 @@ import com.example.mviredux.model.ui.UiProductInCart
 import com.example.mviredux.ui.activity.MainActivity
 import com.example.mviredux.ui.adapter.controller.CartFragmentEpoxyController
 import com.example.mviredux.ui.adapter.model.CartItemEpoxyModel
+import com.example.mviredux.utils.AppConst
 import com.example.mviredux.viewModel.CartFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import kotlin.math.max
 
 @AndroidEntryPoint
@@ -62,8 +64,25 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                 CartFragmentUiState.NonEmpty(inCartUiProduct)
             }
             epoxyController.setData(viewState)
+            updateTotalLayout(inCartUiProduct)
         }
 
+        swipeToDelete()
+
+        binding.checkoutButton.setOnClickListener {
+            // todo
+        }
+
+    }
+
+    private fun updateTotalLayout(inCartUiProduct:List<UiProductInCart>) {
+        val totalAmount: BigDecimal = inCartUiProduct.sumOf { BigDecimal(it.quantity) * it.uiProduct.product.price }
+        val description = "${inCartUiProduct.size} items for ${AppConst.currencyFormatter.format(totalAmount)}"
+        binding.totalDescription.text = description
+        binding.checkoutButton.isEnabled = inCartUiProduct.isNotEmpty()
+    }
+
+    private fun swipeToDelete() {
         EpoxyTouchHelper
             .initSwiping(binding.epoxyRecyclerView)
             .right()
@@ -90,12 +109,11 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                         translationX = max(-itemView.translationX, -measuredWidth.toFloat())
                         alpha = 5f * swipeProgress //this is for start fading
                     }
-//                    itemView?.findViewById<View>(R.id.cl_parent)?.apply {
-//                        alpha = -(3f * swipeProgress)
-//                    }
+    //                    itemView?.findViewById<View>(R.id.cl_parent)?.apply {
+    //                        alpha = -(3f * swipeProgress)
+    //                    }
                 }
             })
-
     }
 
     private fun onEmptyCardClick() {

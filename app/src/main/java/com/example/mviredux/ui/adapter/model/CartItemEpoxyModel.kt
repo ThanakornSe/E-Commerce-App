@@ -8,6 +8,8 @@ import com.example.mviredux.R
 import com.example.mviredux.databinding.EpoxyModelCartProductItemBinding
 import com.example.mviredux.model.ui.UiProductInCart
 import com.example.mviredux.utils.ViewBindingKotlinModel
+import java.math.BigDecimal
+import java.text.NumberFormat
 
 data class CartItemEpoxyModel(
     val uiProductInCart: UiProductInCart,
@@ -16,6 +18,8 @@ data class CartItemEpoxyModel(
     private val onDeleteClicked: (Int) -> Unit,
     private val onQuantityChange: (Int, Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
+
+    private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance()
 
     override fun EpoxyModelCartProductItemBinding.bind() {
         swipeToDismissTextView.translationX = 0f
@@ -55,5 +59,8 @@ data class CartItemEpoxyModel(
                 )
             }
         }
+
+        val totalPrice = uiProductInCart.uiProduct.product.price * BigDecimal(uiProductInCart.quantity)
+        tvTotalProductPrice.text = currencyFormatter.format(totalPrice)
     }
 }
