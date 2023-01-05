@@ -9,8 +9,11 @@ import com.example.mviredux.model.network.NetworkUser
 import com.example.mviredux.redux.ApplicationState
 import com.example.mviredux.redux.Store
 import com.example.mviredux.repository.AuthRepository
+import com.example.mviredux.utils.AppConst.capitalize
+import com.example.mviredux.utils.AppConst.parseError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -26,26 +29,27 @@ class AuthViewModel @Inject constructor(
         if (response.isSuccessful) {
             val donUserResponse: Response<NetworkUser> = authRepository.fetchUser()
             store.update { applicationState ->
-                applicationState.copy(
-                    user = donUserResponse.body()?.let { userResponse ->
-                        userMapper.buildFrom(userResponse)
-                    }
+                val authState = donUserResponse.body()?.let { body ->
+                    ApplicationState.AuthState.Authenticated(user = userMapper.buildFrom(body))
+                }?: ApplicationState.AuthState.UnAuthenticated(
+                    errorString = response.errorBody()?.parseError()
                 )
-            }
 
-            if (donUserResponse.body() == null) {
-                Log.e("Login", response.errorBody()?.toString() ?: response.message())
+                return@update  applicationState.copy(authState = authState)
             }
         } else {
-            Log.e(
-                "Login",
-                response.errorBody()?.byteStream()?.bufferedReader()?.readLine() ?: "Invalid Login"
-            )
+            store.update { applicationState ->
+                applicationState.copy(
+                    authState = ApplicationState.AuthState.UnAuthenticated(
+                        errorString = response.errorBody()?.parseError()
+                    )
+                )
+            }
         }
     }
 
     fun logout() = viewModelScope.launch {
-        store.update { applicationState -> applicationState.copy(user = null) }
+        store.update { applicationState -> applicationState.copy(authState = ApplicationState.AuthState.UnAuthenticated()) }
         // traditionally make a call the the BE
     }
 

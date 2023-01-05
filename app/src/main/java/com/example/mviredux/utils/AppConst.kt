@@ -2,6 +2,8 @@ package com.example.mviredux.utils
 
 import android.content.res.Resources
 import androidx.annotation.Dimension
+import com.example.mviredux.utils.AppConst.capitalize
+import okhttp3.ResponseBody
 import java.text.NumberFormat
 import java.util.*
 
@@ -22,5 +24,9 @@ object AppConst {
                 it.titlecase(Locale.getDefault())
             } else it.toString()
         }
+    }
+
+    fun ResponseBody?.parseError(): String? {
+        return this?.byteStream()?.bufferedReader()?.readLine()?.capitalize()
     }
 }
