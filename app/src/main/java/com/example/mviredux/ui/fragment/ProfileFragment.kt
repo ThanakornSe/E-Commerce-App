@@ -15,6 +15,7 @@ import com.example.mviredux.ui.adapter.controller.ProfileEpoxyController
 import com.example.mviredux.viewModel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -48,6 +49,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.headerTextView.text = authState?.getGreetingMessage()
             binding.infoTextView.text = authState?.getEmail()
         }
+
+        viewModel.intentFlow.filterNotNull().asLiveData().observe(viewLifecycleOwner) { intent ->
+            startActivity(intent)
+        }
     }
 
     private fun onSignIn(username: String, password: String) {
@@ -57,7 +62,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun onProfileItemSelected(id: Int) {
         when (id) {
             R.drawable.ic_round_phone_24 -> {
-                // call intent
+                viewModel.sendCallIntent()
             }
             R.drawable.ic_round_location_24 -> {
                 // location intent
