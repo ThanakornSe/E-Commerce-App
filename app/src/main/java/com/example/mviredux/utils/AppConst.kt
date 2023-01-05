@@ -15,4 +15,12 @@ object AppConst {
     fun Int.toPx():Int = (this/Resources.getSystem().displayMetrics.density).toInt()
 
     val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance()
+
+    fun String.capitalize(): String {
+        return this.replaceFirstChar {
+            if (it.isLowerCase()) {
+                it.titlecase(Locale.getDefault())
+            } else it.toString()
+        }
+    }
 }

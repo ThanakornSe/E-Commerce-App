@@ -1,5 +1,6 @@
 package com.example.mviredux.di
 
+import com.example.mviredux.network.AuthServices
 import com.example.mviredux.network.ProductsServices
 import com.example.mviredux.utils.AppConst
 import dagger.Module
@@ -42,5 +43,11 @@ object NetworkModule {
     @Singleton
     fun providesProductServices(retrofit: Retrofit):ProductsServices {
         return retrofit.create(ProductsServices::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAuthServices(retrofit: Retrofit):AuthServices {
+        return retrofit.create(AuthServices::class.java)
     }
 }
