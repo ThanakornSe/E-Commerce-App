@@ -44,4 +44,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun logout() = viewModelScope.launch {
+        store.update { applicationState -> applicationState.copy(user = null) }
+        // traditionally make a call the the BE
+    }
+
 }
