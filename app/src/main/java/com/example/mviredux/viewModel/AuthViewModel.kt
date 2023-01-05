@@ -2,24 +2,20 @@ package com.example.mviredux.viewModel
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mviredux.model.domain.user.Address
 import com.example.mviredux.model.mapper.UserMapper
 import com.example.mviredux.model.network.LoginResponse
 import com.example.mviredux.model.network.NetworkUser
 import com.example.mviredux.redux.ApplicationState
 import com.example.mviredux.redux.Store
 import com.example.mviredux.repository.AuthRepository
-import com.example.mviredux.utils.AppConst.capitalize
 import com.example.mviredux.utils.AppConst.parseError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -70,6 +66,16 @@ class AuthViewModel @Inject constructor(
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:${phoneNumber}")
         _intentFlow.emit(intent)
+    }
+
+    fun sendLocationIntent() = viewModelScope.launch {
+        val address: Address = store.read {
+            (it.authState as ApplicationState.AuthState.Authenticated).user.address
+        }
+
+        val intentUri = Uri.parse("geo:${address.lat},${address.long}")
+        val mapIntent = Intent(Intent.ACTION_VIEW,intentUri)
+        mapIntent.setPackage("com.google.android.apps.maps")
     }
 
 }
