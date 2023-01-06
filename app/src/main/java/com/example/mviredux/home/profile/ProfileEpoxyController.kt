@@ -1,25 +1,20 @@
-package com.example.mviredux.ui.adapter.controller
+package com.example.mviredux.home.profile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.androidfactory.fakestore.extensions.toPx
 import com.example.mviredux.R
-import com.example.mviredux.model.domain.user.User
+import com.example.mviredux.home.cart.DividerEpoxyModel
 import com.example.mviredux.redux.ApplicationState
-import com.example.mviredux.redux.reducer.UserProfileItemGenerator
-import com.example.mviredux.ui.adapter.model.DividerEpoxyModel
-import com.example.mviredux.ui.adapter.model.SignedInItemEpoxyModel
-import com.example.mviredux.ui.adapter.model.SignedOutEpoxyModel
-import com.example.mviredux.utils.AppConst.toPx
 
 class ProfileEpoxyController(
     private val userProfileItemGenerator: UserProfileItemGenerator,
-    val onSignIn: (String, String) -> Unit,
-    val onClick: (Int) -> Unit
+    private val profileUiActions: ProfileUiActions
 ) : TypedEpoxyController<ApplicationState.AuthState?>() {
 
     override fun buildModels(data: ApplicationState.AuthState?) {
         when (data) {
             is ApplicationState.AuthState.UnAuthenticated -> {
-                SignedOutEpoxyModel(onSignIn = onSignIn, errorMessage = data.errorString).id("signed_out_state").addTo(this)
+                SignedOutEpoxyModel(onSignIn = ::onSignIn, errorMessage = data.errorString).id("signed_out_state").addTo(this)
             }
             is ApplicationState.AuthState.Authenticated -> {
                 userProfileItemGenerator.buildItems(user = data.user).forEach { profileItem ->
@@ -27,7 +22,7 @@ class ProfileEpoxyController(
                         iconRes = profileItem.iconRes,
                         headerText = profileItem.headerText,
                         infoText = profileItem.infoText,
-                        onClick = onClick
+                        onClick = ::onClick
                     ).id(profileItem.iconRes).addTo(this)
 
                     DividerEpoxyModel(
@@ -39,7 +34,7 @@ class ProfileEpoxyController(
                     iconRes = R.drawable.ic_round_logout_24,
                     headerText = "Logout",
                     infoText = "Sign out of your account",
-                    onClick = onClick
+                    onClick = ::onClick
                 ).id(R.drawable.ic_round_logout_24).addTo(this)
             }
             else -> {
@@ -47,5 +42,13 @@ class ProfileEpoxyController(
             }
 
         }
+    }
+
+    private fun onSignIn(username:String, password:String) {
+        profileUiActions.onSignIn(username,password)
+    }
+
+    private fun onClick(resId:Int) {
+        profileUiActions.onProfileItemSelected(resId)
     }
 }

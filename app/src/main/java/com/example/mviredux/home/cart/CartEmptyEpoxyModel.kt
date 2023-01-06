@@ -1,4 +1,4 @@
-package com.example.mviredux.ui.adapter.model
+package com.example.mviredux.home.cart
 
 import com.example.mviredux.R
 import com.example.mviredux.databinding.EpoxyModelCartEmptyBinding

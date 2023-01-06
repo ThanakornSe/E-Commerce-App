@@ -2,7 +2,7 @@ package com.example.mviredux.repository
 
 import com.androidfactory.fakestore.model.domain.Product
 import com.androidfactory.fakestore.model.mapper.ProductMapper
-import com.example.mviredux.network.ProductsServices
+import com.example.mviredux.di.network.ProductsServices
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(

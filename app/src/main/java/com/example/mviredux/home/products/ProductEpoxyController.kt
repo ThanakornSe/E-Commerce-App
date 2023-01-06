@@ -1,12 +1,8 @@
-package com.example.mviredux.ui.adapter.controller
+package com.example.mviredux.home.products
 
 import com.airbnb.epoxy.CarouselModel_
 import com.airbnb.epoxy.TypedEpoxyController
-import com.example.mviredux.ui.adapter.model.ProductEpoxyModel
-import com.example.mviredux.ui.adapter.model.ProductFilterEpoxyModel
 import com.example.mviredux.model.domain.Filter
-import com.example.mviredux.model.ui.ProductsListFragmentUiState
-import com.example.mviredux.model.ui.UiProduct
 import java.util.UUID
 
 class ProductEpoxyController(
@@ -14,12 +10,12 @@ class ProductEpoxyController(
     private val onAddToCartClicked: (Int) -> Unit,
     private val onProductClicked: (Int) -> Unit,
     private val onFilterSelected: (Filter) -> Unit
-) : TypedEpoxyController<ProductsListFragmentUiState>() {
+) : TypedEpoxyController<ProductListFragmentUiState>() {
 
-    override fun buildModels(data: ProductsListFragmentUiState?) {
+    override fun buildModels(data: ProductListFragmentUiState?) {
 
         when (data) {
-            is ProductsListFragmentUiState.Success -> {
+            is ProductListFragmentUiState.Success -> {
                 val uiFilterModels = data.filters.map { uiFilter ->
                     ProductFilterEpoxyModel(
                         uiFilter = uiFilter,
@@ -37,7 +33,7 @@ class ProductEpoxyController(
                     ).id(uiProduct.product.id).addTo(this)
                 }
             }
-            is ProductsListFragmentUiState.Loading -> {
+            is ProductListFragmentUiState.Loading -> {
                 repeat(7) {
                     val epoxyId = UUID.randomUUID().toString()
                     ProductEpoxyModel(

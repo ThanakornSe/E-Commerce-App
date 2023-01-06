@@ -6,18 +6,18 @@
     app:startDestination="@id/productListFragment">
 
     <fragment android:id="@+id/productListFragment"
-        android:name="com.example.mviredux.ui.fragment.ProductListFragment"
+        android:name="com.example.mviredux.home.products.ProductListFragment"
         android:label="All Product"
         tools:layout="@layout/fragment_product_list"
         />
 
     <fragment android:id="@+id/cartFragment"
-        android:name="com.example.mviredux.ui.fragment.CartFragment"
+        android:name="com.example.mviredux.home.cart.CartFragment"
         android:label="Your Cart"
         tools:layout="@layout/fragment_cart"/>
 
     <fragment android:id="@+id/profileFragment"
-        android:name="com.example.mviredux.ui.fragment.ProfileFragment"
+        android:name="com.example.mviredux.home.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile"
         />

@@ -6,7 +6,7 @@ import com.androidfactory.fakestore.model.domain.Product
 import com.example.mviredux.model.domain.Filter
 import com.example.mviredux.redux.ApplicationState
 import com.example.mviredux.redux.Store
-import com.example.mviredux.redux.reducer.FilterGenerator
+import com.example.mviredux.home.products.FilterGenerator
 import com.example.mviredux.redux.reducer.UIProductListReducer
 import com.example.mviredux.redux.updater.UiProductFavoriteUpdater
 import com.example.mviredux.redux.updater.UiProductInCartUpdater

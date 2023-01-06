@@ -1,4 +1,4 @@
-package com.example.mviredux.network
+package com.example.mviredux.di.network
 
 import com.example.mviredux.model.network.NetworkProduct
 import com.example.mviredux.utils.AppConst

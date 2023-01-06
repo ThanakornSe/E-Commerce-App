@@ -1,4 +1,4 @@
-package com.example.mviredux.ui.adapter.model
+package com.example.mviredux.home.profile
 
 import androidx.annotation.DrawableRes
 import com.example.mviredux.R

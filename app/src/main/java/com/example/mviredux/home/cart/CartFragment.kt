@@ -1,4 +1,4 @@
-package com.example.mviredux.ui.fragment
+package com.example.mviredux.home.cart
 
 import android.graphics.Canvas
 import android.os.Bundle
@@ -12,9 +12,7 @@ import com.example.mviredux.R
 import com.example.mviredux.databinding.FragmentCartBinding
 import com.example.mviredux.model.ui.CartFragmentUiState
 import com.example.mviredux.model.ui.UiProductInCart
-import com.example.mviredux.ui.activity.MainActivity
-import com.example.mviredux.ui.adapter.controller.CartFragmentEpoxyController
-import com.example.mviredux.ui.adapter.model.CartItemEpoxyModel
+import com.example.mviredux.MainActivity
 import com.example.mviredux.utils.AppConst
 import com.example.mviredux.viewModel.CartFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint

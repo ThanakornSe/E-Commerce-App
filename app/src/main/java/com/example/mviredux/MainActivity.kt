@@ -1,4 +1,4 @@
-package com.example.mviredux.ui.activity
+package com.example.mviredux
 
 import android.os.Bundle
 import androidx.annotation.IdRes
@@ -9,7 +9,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.airbnb.epoxy.Carousel
-import com.example.mviredux.R
 import com.example.mviredux.databinding.ActivityMainBinding
 import com.example.mviredux.redux.ApplicationState
 import com.example.mviredux.redux.Store

@@ -1,4 +1,4 @@
-package com.example.mviredux.redux.reducer
+package com.example.mviredux.home.profile
 
 import androidx.annotation.DrawableRes
 import com.example.mviredux.R

@@ -1,11 +1,10 @@
 package com.androidfactory.fakestore.model.mapper
 
+import com.androidfactory.fakestore.extensions.capitalize
 import com.androidfactory.fakestore.model.domain.Product
 import com.example.mviredux.model.network.NetworkProduct
-import com.example.mviredux.utils.AppConst.capitalize
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
 import javax.inject.Inject
 
 class ProductMapper @Inject constructor() {

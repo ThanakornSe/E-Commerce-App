@@ -1,6 +1,5 @@
-package com.example.mviredux.ui.adapter.model
+package com.example.mviredux.home.profile
 
-import android.view.View
 import com.example.mviredux.R
 import com.example.mviredux.databinding.EpoxyModelProfileSignedOutBinding
 import com.example.mviredux.utils.ViewBindingKotlinModel

@@ -1,4 +1,4 @@
-package com.example.mviredux.ui.adapter.model
+package com.example.mviredux.home.products
 
 import androidx.core.content.ContextCompat
 import com.example.mviredux.R

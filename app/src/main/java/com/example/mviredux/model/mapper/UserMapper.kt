@@ -1,10 +1,10 @@
 package com.example.mviredux.model.mapper
 
+import com.androidfactory.fakestore.extensions.capitalize
 import com.example.mviredux.model.domain.user.Address
 import com.example.mviredux.model.domain.user.Name
 import com.example.mviredux.model.domain.user.User
 import com.example.mviredux.model.network.NetworkUser
-import com.example.mviredux.utils.AppConst.capitalize
 import javax.inject.Inject
 
 class UserMapper @Inject constructor() {

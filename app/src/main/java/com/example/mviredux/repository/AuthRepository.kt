@@ -5,7 +5,7 @@ import com.example.mviredux.model.mapper.UserMapper
 import com.example.mviredux.model.network.LoginPostBody
 import com.example.mviredux.model.network.LoginResponse
 import com.example.mviredux.model.network.NetworkUser
-import com.example.mviredux.network.AuthServices
+import com.example.mviredux.di.network.AuthServices
 import retrofit2.Response
 import javax.inject.Inject
 

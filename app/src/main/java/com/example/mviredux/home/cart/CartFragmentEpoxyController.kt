@@ -1,11 +1,8 @@
-package com.example.mviredux.ui.adapter.controller
+package com.example.mviredux.home.cart
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.androidfactory.fakestore.extensions.toPx
 import com.example.mviredux.model.ui.CartFragmentUiState
-import com.example.mviredux.ui.adapter.model.CartEmptyEpoxyModel
-import com.example.mviredux.ui.adapter.model.CartItemEpoxyModel
-import com.example.mviredux.ui.adapter.model.DividerEpoxyModel
-import com.example.mviredux.utils.AppConst.toPx
 import com.example.mviredux.utils.VerticalSpaceEpoxyModel
 
 class CartFragmentEpoxyController(

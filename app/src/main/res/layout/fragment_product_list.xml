@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/purple_100"
-    tools:context=".ui.fragment.ProductListFragment">
+    tools:context=".home.products.ProductListFragment">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/epoxy_recycler_view"

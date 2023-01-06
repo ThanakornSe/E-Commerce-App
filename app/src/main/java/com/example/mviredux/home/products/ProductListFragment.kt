@@ -1,4 +1,4 @@
-package com.example.mviredux.ui.fragment
+package com.example.mviredux.home.products
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mviredux.databinding.FragmentProductListBinding
 import com.example.mviredux.model.domain.Filter
-import com.example.mviredux.redux.reducer.ProductListFragmentUiStateGenerator
-import com.example.mviredux.ui.adapter.controller.ProductEpoxyController
 import com.example.mviredux.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
