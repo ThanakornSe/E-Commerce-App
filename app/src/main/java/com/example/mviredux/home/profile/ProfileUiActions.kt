@@ -16,7 +16,7 @@ class ProfileUiActions(private val viewModel: AuthViewModel) {
                 viewModel.sendCallIntent()
             }
             R.drawable.ic_round_location_24 -> {
-                // location intent
+                viewModel.sendLocationIntent()
             }
             R.drawable.ic_round_logout_24 -> {
                 viewModel.logout()

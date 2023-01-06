@@ -73,9 +73,10 @@ class AuthViewModel @Inject constructor(
             (it.authState as ApplicationState.AuthState.Authenticated).user.address
         }
 
-        val intentUri = Uri.parse("geo:${address.lat},${address.long}")
-        val mapIntent = Intent(Intent.ACTION_VIEW,intentUri)
-        mapIntent.setPackage("com.google.android.apps.maps")
+        val intentUri = Uri.parse("geo:40.7128,-74.0060")
+        val mapIntent = Intent(Intent.ACTION_VIEW, intentUri)
+        //mapIntent.setPackage("com.google.android.apps.maps")
+        _intentFlow.emit(mapIntent)
     }
 
 }
